@@ -98,5 +98,5 @@ func ConnectToTestDB() *reform.DB {
 		log.Fatalf("reform: no dialect for driver %s", driver)
 	}
 
-	return reform.NewDB(db, dialect, nil)
+	return reform.NewDB(db, dialect, nil, false)
 }

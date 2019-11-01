@@ -28,6 +28,7 @@ var (
 	driverF = flag.String("db-driver", "", "Database driver (required)")
 	sourceF = flag.String("db-source", "", "Database connection string (required)")
 	waitF   = flag.Duration("db-wait", 0, "Wait for database connection to be established, retrying every second")
+	tablesF = flag.Bool("skip-tables", false, "Skip failure if SQLite table not found")
 )
 
 func init() {
@@ -77,7 +78,7 @@ func getDB() *reform.DB {
 
 	logger.Debugf("Connected to database.")
 	dialect := dialects.ForDriver(*driverF)
-	return reform.NewDB(sqlDB, dialect, reform.NewPrintfLogger(logger.Debugf))
+	return reform.NewDB(sqlDB, dialect, reform.NewPrintfLogger(logger.Debugf), tablesF)
 }
 
 func main() {

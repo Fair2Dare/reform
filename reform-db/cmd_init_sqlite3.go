@@ -82,6 +82,10 @@ func initModelsSQLite3(db *reform.DB) (structs []StructData) {
 
 		rows, err := db.Query("PRAGMA table_info(" + tableName + ")") // no placeholders for PRAGMA
 		if err != nil {
+			if db.skipErrorTables {
+				logger.Printf("%s", err)
+				continue
+			}
 			logger.Fatalf("%s", err)
 		}
 		for {

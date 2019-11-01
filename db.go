@@ -18,22 +18,24 @@ var _ DBInterface = (*sql.DB)(nil)
 // DB represents a connection to SQL database.
 type DB struct {
 	*Querier
-	db DBInterface
+	db              DBInterface
+	skipErrorTables bool
 }
 
 // NewDB creates new DB object for given SQL database connection.
 // Logger can be nil.
-func NewDB(db *sql.DB, dialect Dialect, logger Logger) *DB {
-	return NewDBFromInterface(db, dialect, logger)
+func NewDB(db *sql.DB, dialect Dialect, logger Logger, skipErrorTables bool) *DB {
+	return NewDBFromInterface(db, dialect, logger, skipErrorTables)
 }
 
 // NewDBFromInterface creates new DB object for given DBInterface.
 // Can be used for easier integration with existing code or for passing test doubles.
 // Logger can be nil.
-func NewDBFromInterface(db DBInterface, dialect Dialect, logger Logger) *DB {
+func NewDBFromInterface(db DBInterface, dialect Dialect, logger Logger, skipErrorTables bool) *DB {
 	return &DB{
-		Querier: newQuerier(db, dialect, logger),
-		db:      db,
+		Querier:         newQuerier(db, dialect, logger),
+		db:              db,
+		skipErrorTables: skipErrorTables,
 	}
 }
 
